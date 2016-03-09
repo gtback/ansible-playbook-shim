@@ -3,6 +3,8 @@
 # This shim works only with modern versions of Vagrant 1.7.3 +
 #
 
+set -e
+
 echo "Parameters received: $@"
 
 # Get inventory file from ansible-playbook parameters
