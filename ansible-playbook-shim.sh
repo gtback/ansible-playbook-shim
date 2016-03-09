@@ -21,6 +21,8 @@ while IFS='' read -r line; do
         #copy key files to host folders, chmod files
         mkdir -p $HOME/.ssh/vagrant/$HOSTNAME
         NEW_PRIV_KEY="$HOME/.ssh/vagrant/$HOSTNAME/private_key"
+        # Remove an existing key file if it exists
+        rm -f $NEW_PRIV_KEY
         cp $(cygpath -u $ORIG_PRIV_KEY) $NEW_PRIV_KEY
         setfacl -s user::r--,group::---,other::--- $NEW_PRIV_KEY
         echo `echo $line | sed -E "s|ansible_ssh_private_key_file=([^ ]*)|ansible_ssh_private_key_file=$NEW_PRIV_KEY|"`
