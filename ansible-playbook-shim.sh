@@ -37,7 +37,11 @@ ANSIBLE_SSH_ARGS=`echo $ANSIBLE_SSH_ARGS | sed -E "s|-o ControlPersist=([^ ]*)||
 # Disable ControlMaster, as it's not working on Windows
 export ANSIBLE_SSH_ARGS=$ANSIBLE_SSH_ARGS
 
-# Finally run ansible-playbook with original parameters
-ansible-playbook $@
+# Ansible >= 2.0 seems to not like when the --inventory-file contains windows
+# path elements like "C:/"
+INVENTORY=`echo $@ | sed -E 's|.*--inventory-file=([^ ]*).*|\1|'`
+NEW_INVENTORY=$(cygpath -u $INVENTORY)
+ARGS=`echo $@ | sed -E "s|$INVENTORY|$NEW_INVENTORY|"`
 
-
+echo "New Parameters: $ARGS"
+ansible-playbook $ARGS
