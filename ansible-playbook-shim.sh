@@ -17,7 +17,7 @@ while IFS='' read -r line; do
     if [[ $line == *"ansible_ssh_private_key_file"* ]]
     then
         HOSTNAME=$(echo $line | sed -E 's/([^ ]*)([ ]+).*/\1/')
-        ORIG_PRIV_KEY=$(echo $line | sed -E 's/.*ansible_ssh_private_key_file=([^ ]*).*/\1/')
+        ORIG_PRIV_KEY=$(echo $line | sed -E "s/.*ansible_ssh_private_key_file='([^']*)'.*/\1/")
         #copy key files to host folders, chmod files
         mkdir -p $HOME/.ssh/vagrant/$HOSTNAME
         NEW_PRIV_KEY="$HOME/.ssh/vagrant/$HOSTNAME/private_key"
